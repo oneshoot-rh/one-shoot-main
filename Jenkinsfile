@@ -5,19 +5,17 @@ pipeline{
         jdk 'jdk17'
     }
     stages{
-        stage('Build'){
+        stage('call common pipeline'){
             steps{
-                bat 'mvn clean package -DskipTests'
-            }
-        }
-        stage('Test'){
-            steps{
-                bat 'mvn test'
-            }
-        }
-        stage('Deploy'){
-            steps{
-                echo 'Deploying the artifact..'
+                script {
+                   checkout([
+                       $class: 'GitSCM',
+                       branches: [[name: '*/main']],
+                       userRemoteConfigs: [[url: 'https://github.com/oneshoot-rh/common-jenkins-pipeline.git']]
+                   ])
+                   def centralizedPipeline = load 'Jenkinsfile'
+                   centralizedPipeline(SERVICE_NAME: 'OneShoot')
+               }
             }
         }
     }

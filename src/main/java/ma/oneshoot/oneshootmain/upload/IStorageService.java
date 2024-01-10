@@ -19,4 +19,6 @@ public interface IStorageService {
 
     void deleteAll();
 
+    Path getUploadDirectory();
+
 }

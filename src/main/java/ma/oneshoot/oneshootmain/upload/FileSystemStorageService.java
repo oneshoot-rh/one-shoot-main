@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -63,8 +64,7 @@ public class FileSystemStorageService implements IStorageService{
             Files.copy(inputStream, distination, StandardCopyOption.REPLACE_EXISTING);
             log.info("File {} uploaded successfully", file.getOriginalFilename());
             log.info("Try to extract text from pdf file");
-            String text = extractorService.extractTextFromPdf(distination.toString());
-            log.info("text {}", text);
+            Map<String, String> extractedObjectFromPdf = extractorService.extractTextFromPdf(distination.toString());
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to store file");
@@ -102,5 +102,10 @@ public class FileSystemStorageService implements IStorageService{
         } catch (IOException e) {
             throw new RuntimeException("Failed to delete stored files");
         }
+    }
+
+    @Override
+    public Path getUploadDirectory() {
+        return this.location;
     }
 }

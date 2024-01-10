@@ -1,6 +1,9 @@
 package ma.oneshoot.oneshootmain.upload;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ma.oneshoot.oneshootmain.processor.ResumeProcessor;
+import ma.oneshoot.oneshootmain.processor.UploadReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,33 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/upload")
 public class UploadController {
-    IStorageService storageService;
+    ResumeProcessor resumeProcessor;
 
     @Autowired
-    public UploadController(IStorageService storageService) {
-        this.storageService = storageService;
+    public UploadController(ResumeProcessor resumeProcessor) {
+        this.resumeProcessor = resumeProcessor;
     }
 
 
 
     @PostMapping
-    public ResponseEntity<?> uploadFiles(@RequestParam("files") MultipartFile[] files) throws IOException {
-        Map<String , String> fileUploadReport = new HashMap<>();
-        for (MultipartFile file : files) {
-            System.out.println(file.getOriginalFilename());
-            try {
-                storageService.store(file);
-                fileUploadReport.put(file.getOriginalFilename(), "uploaded");
-            } catch (Exception e) {
-                fileUploadReport.put(file.getOriginalFilename(), e.getMessage());
-            }
-        }
-        return ResponseEntity.ok(fileUploadReport);
+    public ResponseEntity<UploadReport> uploadFiles(@RequestParam("files") MultipartFile[] files) throws IOException {
+        return ResponseEntity.ok(resumeProcessor.processResumes(files));
     }
 }

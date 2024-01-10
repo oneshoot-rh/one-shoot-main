@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Slf4j
@@ -32,7 +34,7 @@ public class PdfTextExtractorServiceImpl {
         headers.add("Education");
     }
 
-    public  String extractTextFromPdf(String pdfPath) throws FileNotFoundException {
+    public  Map<String,String> extractTextFromPdf(String pdfPath) throws FileNotFoundException {
         File file = new File(pdfPath);
         try (PDDocument document = PDDocument.load(file)) {
             PDFTextStripper textStripper = new PDFTextStripper() {
@@ -63,14 +65,7 @@ public class PdfTextExtractorServiceImpl {
             textStripper.setAddMoreFormatting(true);
 
             String text = textStripper.getText(document);
-            Map<String, String> categorizeText = categorizeText(text);
-
-            log.info("Text extracted from pdf file");
-            for (var entry : categorizeText.entrySet()) {
-                log.info("Header: {}", entry.getKey());
-                log.info("Body: {}", entry.getValue());
-            }
-            return text;
+            return categorizeText(text);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,17 +74,19 @@ public class PdfTextExtractorServiceImpl {
 
 
     public Map<String,String> categorizeText(String text){
-        // TODO : splitting text only which between headers
         Map<String,String> categorizedText = new HashMap<>();
         for (int i = headers.size()-1 ; i>= 0; i--){
-            String header = headers.get(i);
-            String[] splittedText = text.split("(?<=\\n)"+header+"(?=\\r)");
-            if (splittedText.length > 1){
+            String header = "(?<=\\r\\n)"+headers.get(i)+"(?=\\r\\n)";
+            Pattern pattern = Pattern.compile(header);
+            Matcher matcher = pattern.matcher(text);
+            if (matcher.find()){
+                String target = matcher.group();
+                String[] splittedText = text.split(Pattern.quote(target));
                 String bodyText = splittedText[1];
                 // remove content extracted
-                text = text.replace(header, "");
+                text = text.replace(target, "");// to avoid removing the same word if repeated in the body
                 text = text.replace(bodyText, "");
-                categorizedText.put(header, bodyText);
+                categorizedText.put(target, bodyText);
             }
         }
         return categorizedText;

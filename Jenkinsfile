@@ -8,14 +8,12 @@ pipeline{
         stage('call common pipeline'){
             steps{
                 script {
-                   checkout([
-                       $class: 'GitSCM',
-                       branches: [[name: '*/main']],
-                       userRemoteConfigs: [[url: 'https://github.com/oneshoot-rh/common-jenkins-pipeline.git']]
-                   ])
-                   def centralizedPipeline = load 'Jenkinsfile'
-                   centralizedPipeline(SERVICE_NAME: 'OneShoot')
-               }
+                    build job: 'common-pipeline-oneshot', parameters: [
+                        string(name: 'pname', value: 'oneshootmain'),
+                        string(name:'branch', value: 'main'),
+                        string(name:'url', value: 'https://github.com/oneshoot-rh/one-shoot-main.git')],
+                        wait: true
+                }
             }
         }
     }

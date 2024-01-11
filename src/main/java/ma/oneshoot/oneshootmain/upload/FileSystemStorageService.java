@@ -1,7 +1,7 @@
 package ma.oneshoot.oneshootmain.upload;
 
 import lombok.extern.slf4j.Slf4j;
-import ma.oneshoot.oneshootmain.extract.PdfTextExtractorServiceImpl;
+import ma.oneshoot.oneshootmain.extract.IPdfTextExtractorServiceImpl;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.Resource;
@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -26,9 +25,9 @@ import java.util.stream.Stream;
 @Scope("prototype")
 public class FileSystemStorageService implements IStorageService{
     private Path location ;
-    private PdfTextExtractorServiceImpl extractorService;
+    private IPdfTextExtractorServiceImpl extractorService;
 
-    public FileSystemStorageService(PdfTextExtractorServiceImpl extractorService) {
+    public FileSystemStorageService(IPdfTextExtractorServiceImpl extractorService) {
         this.extractorService = extractorService;
         this.init();
     }
@@ -63,8 +62,6 @@ public class FileSystemStorageService implements IStorageService{
         try (InputStream inputStream = file.getInputStream()){
             Files.copy(inputStream, distination, StandardCopyOption.REPLACE_EXISTING);
             log.info("File {} uploaded successfully", file.getOriginalFilename());
-            log.info("Try to extract text from pdf file");
-            Map<String, String> extractedObjectFromPdf = extractorService.extractTextFromPdf(distination.toString());
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to store file");

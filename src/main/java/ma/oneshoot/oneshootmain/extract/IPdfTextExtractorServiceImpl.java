@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 @Service
 @Slf4j
-public class PdfTextExtractorServiceImpl {
+public class IPdfTextExtractorServiceImpl implements IPdfTextExtractorService {
 
     List<String> headers = new ArrayList<>();
 
@@ -34,6 +34,7 @@ public class PdfTextExtractorServiceImpl {
         headers.add("Education");
     }
 
+    @Override
     public  Map<String,String> extractTextFromPdf(String pdfPath) throws FileNotFoundException {
         File file = new File(pdfPath);
         try (PDDocument document = PDDocument.load(file)) {
@@ -73,6 +74,7 @@ public class PdfTextExtractorServiceImpl {
     }
 
 
+    @Override
     public Map<String,String> categorizeText(String text){
         Map<String,String> categorizedText = new HashMap<>();
         for (int i = headers.size()-1 ; i>= 0; i--){

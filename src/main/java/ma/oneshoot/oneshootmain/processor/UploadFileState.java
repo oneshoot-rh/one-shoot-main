@@ -7,7 +7,8 @@ import lombok.Builder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record UploadFileState(
         String fileName,
-        String state,
+        boolean isUploaded,
+        boolean isProcessed,
         String message
 ) {
 }

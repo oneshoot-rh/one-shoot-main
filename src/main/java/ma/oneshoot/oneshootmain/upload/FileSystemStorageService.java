@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 @Scope("prototype")
 public class FileSystemStorageService implements IStorageService{
     private Path location ;
+    private Path distination;
     private IPdfTextExtractorServiceImpl extractorService;
 
     public FileSystemStorageService(IPdfTextExtractorServiceImpl extractorService) {
@@ -56,12 +57,13 @@ public class FileSystemStorageService implements IStorageService{
         Path distination = this.location.resolve(
             Paths.get(Objects.requireNonNull(file.getOriginalFilename())))
             .normalize().toAbsolutePath();
+        this.distination = distination;
         if (!distination.getParent().equals(this.location.toAbsolutePath())){
             throw new RuntimeException("Cannot store file outside current directory");
         }
         try (InputStream inputStream = file.getInputStream()){
             Files.copy(inputStream, distination, StandardCopyOption.REPLACE_EXISTING);
-            log.info("File {} uploaded successfully", file.getOriginalFilename());
+            log.info("File {} isUploaded successfully", file.getOriginalFilename());
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to store file");
@@ -102,7 +104,7 @@ public class FileSystemStorageService implements IStorageService{
     }
 
     @Override
-    public Path getUploadDirectory() {
-        return this.location;
+    public Path getUploadDistination() {
+        return this.distination;
     }
 }

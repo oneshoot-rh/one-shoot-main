@@ -2,6 +2,7 @@ package ma.oneshoot.oneshootmain.upload;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ma.oneshoot.oneshootmain.extract.LoadingResumeException;
 import ma.oneshoot.oneshootmain.processor.ResumeProcessor;
 import ma.oneshoot.oneshootmain.processor.UploadReport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class UploadController {
 
 
     @PostMapping
-    public ResponseEntity<UploadReport> uploadFiles(@RequestParam("files") MultipartFile[] files) throws IOException {
+    public ResponseEntity<UploadReport> uploadFiles(@RequestParam("files") MultipartFile[] files) throws  LoadingResumeException {
         return ResponseEntity.ok(resumeProcessor.processResumes(files));
     }
 }

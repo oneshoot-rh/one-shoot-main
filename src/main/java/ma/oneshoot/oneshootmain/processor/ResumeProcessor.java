@@ -4,6 +4,7 @@ package ma.oneshoot.oneshootmain.processor;
 import lombok.extern.slf4j.Slf4j;
 import ma.oneshoot.oneshootmain.analyse.ResumeContentAnalyserImpl;
 import ma.oneshoot.oneshootmain.extract.IPdfTextExtractorService;
+import ma.oneshoot.oneshootmain.extract.LoadingResumeException;
 import ma.oneshoot.oneshootmain.upload.IStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,35 +31,52 @@ public class ResumeProcessor {
     }
 
 
-    public UploadReport processResumes(MultipartFile[] files) throws FileNotFoundException {
+    public UploadReport processResumes(MultipartFile[] files) {
         List<UploadFileState> uploadFileStates = new ArrayList<>();
-        String uploadDirectory = storageService.getUploadDirectory().toString();
+        // store and extract functionalities
         for (MultipartFile file : files) {
             UploadFileState uploadFileState = null ;
+            boolean isProcessed;
+            String message = null;
             try {
                 storageService.store(file);
+                try {
+                    Map<String, String> extractedObjectFromPdf = extractorService.extractTextFromPdf(storageService.getUploadDistination().toString());
+                    log.info("Text extracted successfully");
+                    isProcessed = true;
+                    log.info("Processing extracted text");
+                    resumeContentAnalyser.analyse(extractedObjectFromPdf);
+                } catch (FileNotFoundException e) {
+                    log.debug("Failed to load resumes {}", e.getMessage());
+                    message = "Failed to load "+e.getMessage();
+                    throw new LoadingResumeException(message);
+                }
                 uploadFileState = UploadFileState.builder()
                         .fileName(file.getOriginalFilename())
-                        .state("uploaded")
+                        .isUploaded(true)
+                        .isProcessed(isProcessed)
                         .build();
             } catch (Exception e) {
                 uploadFileState = UploadFileState.builder()
                         .fileName(file.getOriginalFilename())
-                        .state("failed")
-                        .message(e.getMessage())
+                        .isUploaded(false)
+                        .message(message == null ? e.getMessage() : message)
+                        .isProcessed(false)
                         .build();
             }finally {
                 uploadFileStates.add(uploadFileState);
             }
         }
-        log.info("Try to extract text from pdf file");
-        Map<String, String> extractedObjectFromPdf = extractorService.extractTextFromPdf(storageService.getUploadDirectory().toString());
-        log.info("Text extracted successfully");
-        resumeContentAnalyser.analyse(extractedObjectFromPdf);
+
+        String uploadDistination = uploadFileStates.stream()
+                .filter(uploadFileState -> uploadFileState.isUploaded())
+                .count() > 0 ? storageService.getUploadDistination().toString() : null;
+
+        //resumeContentAnalyser.analyse(extractedObjectFromPdf);
         return UploadReport.builder()
                 .uploadedFiles(uploadFileStates)
                 .uploadDate(java.time.LocalDateTime.now())
-                .uploadDirectory(uploadDirectory)
+                .uploadDirectory(uploadDistination)
                 .build();
     }
 }

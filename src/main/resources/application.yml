@@ -1,5 +1,10 @@
 server:
   port: 80
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG
+    io.r2dbc.h2: DEBUG
+
 spring:
   application:
     name: one-shoot-main
@@ -7,3 +12,7 @@ spring:
     multipart:
       max-file-size: 100MB  # 2MB/file (50files) = 100MB                { linkedIn profile PDF 50kb-100kb --> 100MB support 1000 files  }
       max-request-size: 100MB  # 2MB/file (50files) = 100MB
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create

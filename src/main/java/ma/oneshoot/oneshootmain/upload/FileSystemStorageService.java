@@ -2,10 +2,11 @@ package ma.oneshoot.oneshootmain.upload;
 
 import lombok.extern.slf4j.Slf4j;
 import ma.oneshoot.oneshootmain.extract.IPdfTextExtractorServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -21,8 +22,8 @@ import java.util.stream.Stream;
 
 @Service
 @Slf4j
-@Profile("dev")
-@Scope("prototype")
+//@Profile("dev")
+@RequestScope
 public class FileSystemStorageService implements IStorageService{
     private Path location ;
     private Path distination;
@@ -49,7 +50,7 @@ public class FileSystemStorageService implements IStorageService{
     }
 
     @Override
-    public void store(MultipartFile file) {
+    public String store(MultipartFile file) {
         log.info("Uploading file {} ", file.getOriginalFilename());
         if(file.isEmpty()){
             throw new RuntimeException("Failed to store empty file");
@@ -57,13 +58,13 @@ public class FileSystemStorageService implements IStorageService{
         Path distination = this.location.resolve(
             Paths.get(Objects.requireNonNull(file.getOriginalFilename())))
             .normalize().toAbsolutePath();
-        this.distination = distination;
         if (!distination.getParent().equals(this.location.toAbsolutePath())){
             throw new RuntimeException("Cannot store file outside current directory");
         }
         try (InputStream inputStream = file.getInputStream()){
             Files.copy(inputStream, distination, StandardCopyOption.REPLACE_EXISTING);
             log.info("File {} isUploaded successfully", file.getOriginalFilename());
+            return distination.toString();
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to store file");
@@ -105,6 +106,6 @@ public class FileSystemStorageService implements IStorageService{
 
     @Override
     public Path getUploadDistination() {
-        return this.distination;
+        return this.location;
     }
 }

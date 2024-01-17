@@ -18,6 +18,9 @@ pipeline{
                         string(name:'BUILD_NUMBER', value: "${BUILD_NUMBER}"),
                         string(name:'url', value: 'https://github.com/oneshoot-rh/one-shoot-main.git')],
                         wait: true
+                    echo "logs:"
+                    def downstreamBuild = downstreamJob.getRawBuild()
+                    echo downstreamBuild.getLog()
                 }
             }
         }

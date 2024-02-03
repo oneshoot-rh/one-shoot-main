@@ -1,8 +1,8 @@
 FROM  jre:17-22.04_edge
 
-COPY target/*.jar /app.jar
+COPY target/*.jar /one-shoot-main.jar
 
-EXPOSE 80
+EXPOSE 1111:1111
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","/one-shoot-main.jar"]
 

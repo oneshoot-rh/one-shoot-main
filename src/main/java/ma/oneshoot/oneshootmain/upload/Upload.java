@@ -1,11 +1,7 @@
 package ma.oneshoot.oneshootmain.upload;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table("uploads")
+@Table(name = "uploads")
 @Entity
 public class Upload {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

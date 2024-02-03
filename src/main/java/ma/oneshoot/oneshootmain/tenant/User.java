@@ -1,21 +1,18 @@
 package ma.oneshoot.oneshootmain.tenant;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.relational.core.mapping.Table;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table("users")
+@Table(name="users")
 @Entity
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String username;
     String name;

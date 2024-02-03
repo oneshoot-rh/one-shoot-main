@@ -7,8 +7,6 @@ import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.nio.file.Path;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -25,4 +23,5 @@ public class Upload {
     String uploadDirectory ;
     LocalDateTime uploadDateTime;
     int uploadedFiles ;
+    Long uploadedBy;
 }

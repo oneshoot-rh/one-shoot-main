@@ -1,10 +1,14 @@
 server:
   port: 1111
+  servlet:
+    context-path: /api
 logging:
-  level:
-    org.springframework.r2dbc: DEBUG
-    io.r2dbc.h2: DEBUG
-
+  pattern:
+    level: "%5p [${spring.application.name:}] tenantId=%X{tenantId:-}"
+eureka:
+  client:
+    serviceUrl:
+        defaultZone: http://localhost:8761/eureka/
 spring:
   application:
     name: one-shoot-main
@@ -15,4 +19,9 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:mysql://localhost:3306/one_shoot_main?useSSL=false&serverTimezone=GMT&createDatabaseIfNotExist=true
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver

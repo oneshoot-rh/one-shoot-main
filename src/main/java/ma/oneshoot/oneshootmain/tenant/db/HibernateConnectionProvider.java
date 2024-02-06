@@ -47,7 +47,7 @@ public class HibernateConnectionProvider implements MultiTenantConnectionProvide
 
     @Override
     public boolean supportsAggressiveRelease() {
-        return true;
+        return false;
     }
 
     @Override

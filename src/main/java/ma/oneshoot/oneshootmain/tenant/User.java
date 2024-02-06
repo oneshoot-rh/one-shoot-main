@@ -17,4 +17,7 @@ public class User {
     String username;
     String name;
     String password;
+    @ManyToOne
+    @JoinColumn(name = "tenant_id")
+    Tenant tenant;
 }

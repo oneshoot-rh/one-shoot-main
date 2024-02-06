@@ -5,7 +5,7 @@ pipeline{
         jdk 'jdk17'
     }
     environment{
-        BRANCH = "${env.branch}"
+        BRANCH = "${env.BRANCH_NAME}"
         BUILD_NUMBER = "${BUILD_NUMBER}"
     }
     stages{

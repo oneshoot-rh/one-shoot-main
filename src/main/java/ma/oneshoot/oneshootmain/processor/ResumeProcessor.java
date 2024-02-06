@@ -81,7 +81,6 @@ public class ResumeProcessor {
         Upload newUpload = Upload.builder()
                 .uploadDateTime(LocalDateTime.now())
                 .uploadDirectory(storageService.getUploadDistination().toString())
-                .userId(1L)// to be updated
                 .uploadedFiles(uploadedFiles)
                 .build();
         uploadRepository.save(newUpload);

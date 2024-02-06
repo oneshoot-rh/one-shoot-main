@@ -15,9 +15,12 @@ import java.time.LocalDateTime;
 public class Upload {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id ;
-    Long userId ;
+    @Column(name = "upload_directory")
     String uploadDirectory ;
+    @Column(name = "upload_date_time")
     LocalDateTime uploadDateTime;
+    @Column(name = "uploaded_files")
     int uploadedFiles ;
+    @Column(name = "uploaded_by")
     Long uploadedBy;
 }

@@ -1,0 +1,32 @@
+package ma.oneshoot.oneshootmain.tenant;
+
+
+import lombok.RequiredArgsConstructor;
+import org.flywaydb.core.Flyway;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
+
+@Component
+@RequiredArgsConstructor
+public class TenantService {
+
+    private final DataSource dataSource;
+    private final TenantRepository tenantRepository;
+
+
+    public void initDataBase(String scheme) {
+        Flyway flyway = Flyway.configure()
+                .locations("db/migration/tenants")
+                .dataSource(dataSource)
+                .schemas(scheme)
+                .load();
+        flyway.migrate();
+    }
+
+    public void saveTenant(Tenant tenant) {
+        tenantRepository.save(tenant);
+
+    }
+}

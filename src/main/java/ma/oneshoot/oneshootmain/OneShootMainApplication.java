@@ -1,18 +1,16 @@
 package ma.oneshoot.oneshootmain;
 
 import lombok.extern.slf4j.Slf4j;
-import ma.oneshoot.oneshootmain.tenant.Tenant;
-import ma.oneshoot.oneshootmain.tenant.TenantRegistrationService;
-import ma.oneshoot.oneshootmain.tenant.TenantRepository;
-import ma.oneshoot.oneshootmain.tenant.User;
+import ma.oneshoot.oneshootmain.tenant.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @Slf4j
+@EnableTransactionManagement
 //@EnableAspectJAutoProxy
 public class OneShootMainApplication {
 	@Autowired
@@ -25,7 +23,7 @@ public class OneShootMainApplication {
 	}
 
 
-	@Bean
+	//@Bean
 	CommandLineRunner runner() {
 		return args -> {
 			long orgId = System.currentTimeMillis();
@@ -43,7 +41,7 @@ public class OneShootMainApplication {
 			log.info("User: {}", user);
 			tenant.addUser(user);
 			tenantRepository.save(tenant);
-			tenantRegistrationService.registerTenant(tenant);
+			tenantRegistrationService.registerTenant(tenant, SubscriptionType.FREE);
 		};
 	}
 }

@@ -3,7 +3,6 @@ package ma.oneshoot.oneshootmain.tenant;
 
 import lombok.RequiredArgsConstructor;
 import org.flywaydb.core.Flyway;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -28,5 +27,9 @@ public class TenantService {
     public void saveTenant(Tenant tenant) {
         tenantRepository.save(tenant);
 
+    }
+
+    public Boolean isTenantDomainAvailable(String domain) {
+        return tenantRepository.findByOrganizationName(domain).isEmpty();
     }
 }

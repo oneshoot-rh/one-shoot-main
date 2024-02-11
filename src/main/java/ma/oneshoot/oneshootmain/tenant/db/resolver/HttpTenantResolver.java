@@ -11,8 +11,9 @@ import java.util.Enumeration;
 public class HttpTenantResolver implements TenantResolver<HttpServletRequest> {
     @Override
     public String resolveTenantId(HttpServletRequest request) {
-        String forwardedHeader = request.getHeader("forwarded");
-        String quoted = "host=\"";
-        return (((forwardedHeader.split(forwardedHeader.contains(quoted) ? quoted : "host=")[1]).split(";"))[0]).split("\\.")[0];
+        // String forwardedHeader = request.getHeader("forwarded");
+        // String quoted = "host=\"";
+        //return (((forwardedHeader.split(forwardedHeader.contains(quoted) ? quoted : "host=")[1]).split(";"))[0]).split("\\.")[0];
+        return request.getHeader("X-Tenant-Id");
     }
 }

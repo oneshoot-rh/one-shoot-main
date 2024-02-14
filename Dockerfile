@@ -1,4 +1,4 @@
-FROM  jre:17-22.04_edge
+FROM  openjdk:17-jdk-slim
 
 COPY target/*.jar /one-shoot-main.jar
 

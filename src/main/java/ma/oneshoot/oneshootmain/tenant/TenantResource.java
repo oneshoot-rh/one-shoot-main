@@ -3,10 +3,7 @@ package ma.oneshoot.oneshootmain.tenant;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/cl/tenants")
@@ -14,9 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class TenantResource {
 
     private final TenantService tenantService;
+    private final TenantRegistrationService tenantRegistrationService;
 
     @GetMapping("/availability/{domain}")
     public ResponseEntity<Boolean> checkTenantDomainAvailability(@PathVariable String domain){
         return ResponseEntity.ok(tenantService.isTenantDomainAvailable(domain));
+    }
+
+    @PostMapping("/register")
+        public ResponseEntity<Tenant> registerTenant(@RequestBody TenantRegistrationRequestDto requestDto){
+        Tenant tenant = TenantRegistrationRequestDtoMapper.INSTANCE.toTenant(requestDto);
+        return ResponseEntity.ok(tenantRegistrationService.registerTenant(tenant, SubscriptionType.FREE));
     }
 }

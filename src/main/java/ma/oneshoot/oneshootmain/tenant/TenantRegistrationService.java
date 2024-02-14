@@ -36,8 +36,9 @@ public class TenantRegistrationService {
         tenantService.saveTenant(tenant);
         Subscription subscription = Subscription.builder()
                 .tenant(tenant)
+                .organizationName(tenant.getOrganizationName())
                 .startDate(LocalDateTime.now())
-                .endDate(LocalDateTime.now().plusDays(SubscriptionUtil.getSubscriptionDurationInDays(subscriptionType)))
+               // .endDate(LocalDateTime.now().plusDays(SubscriptionUtil.getSubscriptionDurationInDays(subscriptionType)))
                 .subscriptionId(UUID.randomUUID())
                 .subscriptionType(subscriptionType)
                 .build();

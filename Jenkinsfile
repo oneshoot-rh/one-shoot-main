@@ -19,8 +19,8 @@ pipeline{
                         string(name:'url', value: 'https://github.com/oneshoot-rh/one-shoot-main.git')],
                         wait: true
                     echo "logs:"
-                    def downstreamBuild = downstreamJob.getRawBuild()
-                    echo downstreamBuild.getLog()
+                    //def downstreamBuild = downstreamJob.getRawBuild()
+                    //echo downstreamBuild.getLog()
                 }
             }
         }

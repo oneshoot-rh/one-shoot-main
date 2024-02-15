@@ -1,6 +1,7 @@
 package ma.oneshoot.oneshootmain.tenant;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ma.oneshoot.oneshootmain.utils.SubscriptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TenantRegistrationService {
 
     private final UserRepository userRepository;
@@ -31,6 +33,12 @@ public class TenantRegistrationService {
         Objects.requireNonNull(tenant, "Tenant object cannot be null");
         Objects.requireNonNull(subscriptionType, "Subscription type cannot be null");
         Objects.requireNonNull(tenant.getUsers(), "Tenant should have at least one user");
+        subscriptionRepository.findByOrganizationName(tenant.getOrganizationName()).ifPresent(subscription -> {
+            if (subscriptionType.equals(SubscriptionType.FREE)) throw new RuntimeException("Tenant with name " + tenant.getOrganizationName() + " already registered for a freemium subscription.");
+            else {
+                log.info("Tenant with name "+ tenant.getOrganizationName() + " is registering for a premium subscription. Subscription will be updated");
+            }
+        });
         tenant.getUsers().forEach(user -> user.setPassword(passwordEncoder.encode(user.getPassword())));
         userRepository.saveAll(tenant.getUsers());
         tenantService.saveTenant(tenant);

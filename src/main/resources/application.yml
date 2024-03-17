@@ -10,6 +10,11 @@ eureka:
     serviceUrl:
         defaultZone: http://localhost:8761/eureka/
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:9999/realms/OneShoot}
   application:
     name: one-shoot-main
   servlet:
@@ -25,6 +30,7 @@ spring:
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   #flyway:
   #  enabled: true
   #  locations: classpath:db/migration

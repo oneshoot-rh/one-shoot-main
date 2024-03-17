@@ -6,11 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @Slf4j
 @EnableTransactionManagement
+//@EnableWebFluxSecurity
 //@EnableAspectJAutoProxy
 public class OneShootMainApplication {
 	@Autowired
@@ -22,6 +27,18 @@ public class OneShootMainApplication {
 		SpringApplication.run(OneShootMainApplication.class, args);
 	}
 
+	@Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeHttpRequests(request ->
+                    request
+                        .requestMatchers("/actuator/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+                .build();
+    }
+
 
 	//@Bean
 	CommandLineRunner runner() {
@@ -29,7 +46,7 @@ public class OneShootMainApplication {
 			long orgId = System.currentTimeMillis();
 			Tenant tenant = Tenant.builder()
 					.id(1L)
-					.organizationName("org_"+ orgId)
+					.organizationName("org"+ orgId)
 					.build();
 			User user = User.builder()
 					.id(1L)

@@ -26,7 +26,7 @@ public class TenantRegistrationService {
 
 
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Tenant registerTenant(Tenant tenant,SubscriptionType subscriptionType) {
         Objects.requireNonNull(tenant, "Tenant object cannot be null");
         Objects.requireNonNull(subscriptionType, "Subscription type cannot be null");

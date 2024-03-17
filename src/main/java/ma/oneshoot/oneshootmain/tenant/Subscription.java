@@ -2,6 +2,7 @@ package ma.oneshoot.oneshootmain.tenant;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ma.oneshoot.oneshootmain.utils.UUIDToStringConverter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,12 +12,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Table(name = "tenants")
+@Table(name = "subcriptions")
 @Entity
 public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+    @Convert(converter = UUIDToStringConverter.class)
     @Column(name = "subscription_id")
     UUID subscriptionId;
     @Column(name = "organization_name")

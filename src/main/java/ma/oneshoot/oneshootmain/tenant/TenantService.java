@@ -24,8 +24,8 @@ public class TenantService {
         flyway.migrate();
     }
 
-    public void saveTenant(Tenant tenant) {
-        tenantRepository.save(tenant);
+    public Tenant saveTenant(Tenant tenant) {
+        return tenantRepository.save(tenant);
 
     }
 

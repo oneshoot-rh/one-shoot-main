@@ -20,6 +20,8 @@ public class Tenant {
 
     @Column(name = "organization_name")
     String organizationName;
+    @Column(name = "domain_name")
+    String domainName;
     @Column(name = "requestor_role")
     String requestorRole;
     @Column(name = "requestor_professional_email")

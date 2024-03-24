@@ -7,14 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootApplication
 @Slf4j
 @EnableTransactionManagement
+@EnableMethodSecurity
 //@EnableWebFluxSecurity
 //@EnableAspectJAutoProxy
 public class OneShootMainApplication {
@@ -41,6 +44,7 @@ public class OneShootMainApplication {
 
 
 	//@Bean
+	@Transactional(rollbackFor = Exception.class)
 	CommandLineRunner runner() {
 		return args -> {
 			long orgId = System.currentTimeMillis();
@@ -58,7 +62,7 @@ public class OneShootMainApplication {
 			log.info("User: {}", user);
 			tenant.addUser(user);
 			tenantRepository.save(tenant);
-			tenantRegistrationService.registerTenant(tenant, SubscriptionType.FREE);
+			tenantRegistrationService.registerTenant(tenant, SubscriptionType.PROFESSIONAL,true);
 		};
 	}
 }

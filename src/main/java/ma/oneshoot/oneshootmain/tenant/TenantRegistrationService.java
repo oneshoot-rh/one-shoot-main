@@ -71,7 +71,7 @@ public class TenantRegistrationService {
                 .subscriptionType(subscriptionType)
                 .build();
         subscriptionRepository.save(subscription);
-        tenantService.initDataBase(tenant.getOrganizationName());
+        tenantService.initDataBase(tenant.getDomainName());
         NewSubscriptionEvent newSubscriptionEvent = new NewSubscriptionEvent(this, tenant.domainName);
         applicationEventPublisher.publishEvent(newSubscriptionEvent);
         return tenant;

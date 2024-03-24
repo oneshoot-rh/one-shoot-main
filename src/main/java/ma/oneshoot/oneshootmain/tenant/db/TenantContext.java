@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 public final class TenantContext {
 
     private static final ThreadLocal<String> tenantId = new InheritableThreadLocal<>();
-    public static final String DEFAULT_TENANT_ID = "one_shoot_main";
+    public static final String DEFAULT_TENANT_ID = "oneshootmain";
 
 
     public static void setTenantId(String tenant) {

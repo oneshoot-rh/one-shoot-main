@@ -18,4 +18,35 @@ public class SubscriptionUtil {
                 return 0;
         }
     }
+
+    public static double getSubscriptionPrice(SubscriptionType subscriptionType){
+        switch (subscriptionType){
+            case FREE:
+                return 0;
+            case BASIC:
+                return 100;
+            case PROFESSIONAL:
+                return 200;
+            case ENTERPRISE:
+                return 500;
+            default:
+                return 0;
+        }
+    }
+
+    // payment delay
+    public static int getPaymentDelayInDays(SubscriptionType subscriptionType){
+        switch (subscriptionType){
+            case FREE:
+                return 10;
+            case BASIC:
+                return 30;
+            case PROFESSIONAL:
+                return 30;
+            case ENTERPRISE:
+                return 30;
+            default:
+                return 0;
+        }
+    }
 }

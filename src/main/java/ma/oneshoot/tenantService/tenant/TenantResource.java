@@ -2,6 +2,9 @@ package ma.oneshoot.tenantService.tenant;
 
 
 import lombok.RequiredArgsConstructor;
+import ma.oneshoot.tenantService.subscription.NewSubscriptionEvent;
+
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.flywaydb.core.Flyway;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 import javax.sql.DataSource;
 
 @Component
@@ -35,5 +37,9 @@ public class TenantService {
 
     public boolean existsByDomainName(String domainName) {
         return tenantRepository.existsByDomainName(domainName);
+    }
+
+    public Optional<Tenant> findTenantByDomain(String domain) {
+      return tenantRepository.findByDomainName(domain);
     }
 }

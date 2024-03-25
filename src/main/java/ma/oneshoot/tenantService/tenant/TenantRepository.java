@@ -10,4 +10,6 @@ public interface TenantRepository extends JpaRepository<Tenant, Long> {
     Optional<Tenant> findByOrganizationName(String organizationName);
 
     boolean existsByDomainName(String domainName);
+
+    Optional<Tenant> findByDomainName(String domain);
 }

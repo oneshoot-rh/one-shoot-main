@@ -30,6 +30,18 @@ spring:
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: oneshootapplication@gmail.com
+    password: getobyutgabhxnkg
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 
   #flyway:
   #  enabled: true

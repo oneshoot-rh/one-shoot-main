@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ma.oneshoot</groupId>
-	<artifactId>one-shoot-main</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>one-shoot-main</name>
-	<description>one-shoot-main</description>
+	<artifactId>tenantService</artifactId>
+	<version>0.0.1</version>
+	<name>tenantService</name>
+	<description>tenantService</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

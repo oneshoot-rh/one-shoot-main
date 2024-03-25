@@ -16,7 +16,7 @@ spring:
         jwt:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:9999/realms/OneShoot}
   application:
-    name: one-shoot-main
+    name: tenantService
   servlet:
     multipart:
       max-file-size: 100MB  # 2MB/file (50files) = 100MB                { linkedIn profile PDF 50kb-100kb --> 100MB support 1000 files  }
@@ -26,7 +26,7 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:mysql://localhost:3306/one_shoot_main?useSSL=false&serverTimezone=GMT&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/tenantService?useSSL=false&serverTimezone=GMT&createDatabaseIfNotExist=true
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver

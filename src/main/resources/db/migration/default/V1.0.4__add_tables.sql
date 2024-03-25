@@ -2,7 +2,7 @@
 
 
 create table if not exists free_trial_tenant (
-    id serial primary key,
+    id bigint primary key auto_increment,
     tenant_id bigint not null,
     organizationName varchar(255) not null,
     start_date timestamp  null,
@@ -12,7 +12,7 @@ create table if not exists free_trial_tenant (
 
 
 create table if not exists subscription_payment (
-    id bigint primary key,
+    id bigint primary key auto_increment,
     reference varchar(255) not null,
     tenant_id bigint not null,
     organizationName varchar(255) not null,

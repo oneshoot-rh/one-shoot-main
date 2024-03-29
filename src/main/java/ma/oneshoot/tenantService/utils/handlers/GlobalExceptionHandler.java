@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import ma.oneshoot.tenantService.utils.exceptions.TenantDBInitException;
 import ma.oneshoot.tenantService.utils.exceptions.TenantNotFoundException;
 
 @RestControllerAdvice
@@ -19,6 +20,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        e.printStackTrace();
         return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler({TenantDBInitException.class,RuntimeException.class})
+    public ResponseEntity<ErrorResponse> handleTnDbInit(Exception ex){
+        return ResponseEntity.internalServerError().body(new ErrorResponse(ex.getMessage()));
     }
 }

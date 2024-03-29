@@ -29,8 +29,7 @@ public class TenantInterceptor implements HandlerInterceptor {
         TenantContext.setTenantId(tenantId);
         MDC.put("tenantId", tenantId);
         ServerHttpObservationFilter.findObservationContext(request)
-                .ifPresent(observation -> observation.addHighCardinalityKeyValue(KeyValue.of("tenantId", tenantId))
-                );
+                .ifPresent(observation -> observation.addHighCardinalityKeyValue(KeyValue.of("tenantId", tenantId)));
         return true;
     }
 

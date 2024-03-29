@@ -28,7 +28,7 @@ public class EmailService {
         message.setRecipients(MimeMessage.RecipientType.TO, to);
         message.setSubject(subject);
         message.setContent(htmlContent, "text/html; charset=utf-8");
-        //mailSender.send(message);
+       // mailSender.send(message);
     }
     
 }

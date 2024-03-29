@@ -31,11 +31,11 @@ public class FlywayConfig {
     CommandLineRunner commandLineRunner(TenantRepository repository, DataSource dataSource) {
         return args -> {
             repository.findAll().forEach(tenant -> {
-                String tenantId = tenant.getDomainName();
+                String Schema = new StringBuilder().append("tsedb_").append(tenant.getDomainName()).toString();
                 Flyway flyway = Flyway.configure()
                         .locations("db/migration/tenants")
                         .dataSource(dataSource)
-                        .schemas(tenantId)
+                        .schemas(Schema)
                         .load();
                 flyway.migrate();
             });

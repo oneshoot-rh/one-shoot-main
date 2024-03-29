@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -38,8 +39,9 @@ public class TenantRegistrationService {
 
 
 
-
-    @Transactional(rollbackFor = Exception.class)
+    // refer to this post about transactions:
+    // https://blog.pragmatists.com/spring-events-and-transactions-be-cautious-bdb64cb49a95
+    @Transactional(rollbackFor = Exception.class,propagation = Propagation.REQUIRES_NEW) 
     public Tenant registerTenant(Tenant tenant,SubscriptionType subscriptionType, boolean isDemo) {
         Objects.requireNonNull(tenant, "Tenant object cannot be null");
         Objects.requireNonNull(subscriptionType, "Subscription type cannot be null");
@@ -47,6 +49,9 @@ public class TenantRegistrationService {
         // verify if tenant already exists
         if (tenantService.existsByDomainName(tenant.getDomainName())) {
             throw new IllegalArgumentException("Tenant with domain name " + tenant.getDomainName() + " already exists");
+        }
+        if(userRepository.existsByUsername(tenant.getUsers().get(0).getUsername())){
+            throw new IllegalArgumentException("User with username " + tenant.getUsers().get(0).getUsername() + " already exists");
         }
         tenant.getUsers().forEach(user -> user.setPassword(passwordEncoder.encode(user.getPassword())));
         userRepository.saveAll(tenant.getUsers());

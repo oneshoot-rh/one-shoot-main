@@ -28,9 +28,13 @@ public class User {
     String role;
     @OneToMany
     @JoinTable(name = "user_permissions", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    @JsonIgnore
+    @ToStringExclude
     List<Permission> permissions;
     @ManyToOne
     @JoinColumn(name = "tenant_id")
+    @JsonIgnore
+    @ToStringExclude
     Tenant tenant;
 
 }

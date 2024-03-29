@@ -17,7 +17,8 @@ public class TenantService {
     private final TenantRepository tenantRepository;
 
 
-    public void initDataBase(String scheme) {
+    public void initDataBase(String tenantId) {
+        String scheme = new StringBuilder().append("tsedb_").append(tenantId).toString();
         Flyway flyway = Flyway.configure()
                 .locations("db/migration/tenants")
                 .dataSource(dataSource)

@@ -33,9 +33,10 @@ public class HibernateConnectionProvider implements MultiTenantConnectionProvide
     @Override
     public Connection getConnection(String tenantIdentifier) throws SQLException {
         var connection = dataSource.getConnection();
+        String Schema = tenantIdentifier.equalsIgnoreCase(TenantContext.DEFAULT_TENANT_ID) ? TenantContext.DEFAULT_TENANT_ID :  new StringBuilder().append("tsedb_").append(tenantIdentifier).toString();
         //connection.setSchema(tenantIdentifier);
-        connection.createStatement().execute("USE " + tenantIdentifier); //instead of connection.setSchema(tenantIdentifier); when using MySQL
-        log.info("Connection to tenant {} created", tenantIdentifier);
+        connection.createStatement().execute("USE " + Schema); //instead of connection.setSchema(tenantIdentifier); when using MySQL
+        log.info("Connection to tenant {} created", Schema);
         return  connection;
     }
 

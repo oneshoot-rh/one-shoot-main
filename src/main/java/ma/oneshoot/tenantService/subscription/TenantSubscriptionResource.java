@@ -46,6 +46,7 @@ public class TenantSubscriptionResource {
                 .name(subscriptionRequestDto.requestorName())
                 .password(subscriptionRequestDto.requestorTemporaryPassword())
                 .role(subscriptionRequestDto.requestorRole())
+                .tenant(tanant)
                 .build();
         tanant.setUsers(List.of(user));
         return ResponseEntity.ok(tenantRegistrationService.registerTenant(tanant,SubscriptionType.valueOf(subscriptionRequestDto.subscriptionType()),isDemo));

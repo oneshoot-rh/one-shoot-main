@@ -34,7 +34,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: oneshootapplication@gmail.com
-    password: getobyutgabhxnkg
+    password: 
     properties:
       mail:
         smtp:
@@ -48,3 +48,10 @@ spring:
   #  locations: classpath:db/migration
   #  user: admin           # to tell spring boot to create a separate connection for applying the migration
   #  password: the_secured_password
+
+keycloak:
+  realm: OneShoot
+  serverUrl: http://localhost:9999/
+  adminClientId: admin-cli
+  adminClientSecret: yHUjXfiq3zvscHyNQX9ovrj4CizTqE2x
+  client: tenant-service

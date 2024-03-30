@@ -53,7 +53,7 @@ public class TenantRegistrationService {
         if(userRepository.existsByUsername(tenant.getUsers().get(0).getUsername())){
             throw new IllegalArgumentException("User with username " + tenant.getUsers().get(0).getUsername() + " already exists");
         }
-        tenant.getUsers().forEach(user -> user.setPassword(passwordEncoder.encode(user.getPassword())));
+        //tenant.getUsers().forEach(user -> user.setPassword(passwordEncoder.encode(user.getPassword())));
         userRepository.saveAll(tenant.getUsers());
         var savedTenant = tenantService.saveTenant(tenant);
         if (isDemo) {

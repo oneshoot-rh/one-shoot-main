@@ -11,5 +11,7 @@ public interface KeycloakAdminService {
     public void deleteUser(@NotNull Long userId);
 
     public void updateUser(@Valid User user);
+
+    public void addRedirectUrl(String domain);
     
 }

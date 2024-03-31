@@ -26,6 +26,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({TenantDBInitException.class,RuntimeException.class})
     public ResponseEntity<ErrorResponse> handleTnDbInit(Exception ex){
+        ex.printStackTrace();
         return ResponseEntity.internalServerError().body(new ErrorResponse(ex.getMessage()));
     }
 }

@@ -73,18 +73,21 @@ public class NewSubscriptionEventListener  implements ApplicationListener<NewSub
         log.info("EonbordService Successfully created the database");
         // send email with URL and guide to access 
         log.info("Sending email with access and login guide");
+        String tenantAccessDomain = "http://"+tenant.getDomainName()+".oneshoot.local";
+        // call keycloak to add redirect url
+        keycloakAdminService.addRedirectUrl(tenantAccessDomain);
         htmlContent = """
                 <html>
                 <body>
                 <h2>Welcome to OneShoot</h2>
                 <p>Thank you for subscribing to OneShoot. You can access your account by clicking on the link below:</p>
-                <a href="http://localhost:3000">Login</a>
+                <a href="%s">Login</a>
                 <p>Use the following credentials to login:</p>
                 <p>Username: %s </p>
-                <p>Password: %s</p>
+                <p>Temporary Password: %s </p>
                 </body>
                 </html>
-                """.formatted(tenant.getDomainName(), user.getPassword());
+                """.formatted(tenantAccessDomain+":3000/login",user.getUsername(), user.getPassword());
         try {
             emailService.sendHtmlEmail(tenant.getRequestorProfessionalEmail(), "Welcome to OneShoot", htmlContent);
             log.info("email to "+ tenant.getRequestorProfessionalEmail() + " sent successfully");

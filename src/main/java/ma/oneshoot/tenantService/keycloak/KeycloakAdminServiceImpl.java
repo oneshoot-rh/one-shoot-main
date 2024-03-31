@@ -33,7 +33,7 @@ public class KeycloakAdminServiceImpl implements KeycloakAdminService {
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
         credentialRepresentation.setType(CredentialRepresentation.PASSWORD);
         credentialRepresentation.setValue(user.getPassword());
-        credentialRepresentation.setTemporary(false);
+        credentialRepresentation.setTemporary(true);
         List<CredentialRepresentation> credentials = List.of(credentialRepresentation);
 
         UserRepresentation userRepresentation = new UserRepresentation();
@@ -60,12 +60,28 @@ public class KeycloakAdminServiceImpl implements KeycloakAdminService {
 
     @Override
     public void deleteUser(Long userId) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void updateUser(User user) {
-        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void addRedirectUrl(String domain) {
+        String reactDomain = domain + ":3000";
+        String reactValidRedirectURL = reactDomain+"/signin-callback.html";
+        String angularValidRedirectURL = domain + ":4000";
+        log.info("Adding redirect url to keycloak client for domain: " + domain + " with redirect url: " +reactValidRedirectURL + " and " + angularValidRedirectURL);
+        RealmResource realmResource =  keycloak.realm(realm);
+        var  client = realmResource.clients().findByClientId("frontend_client").get(0);
+        client.getRedirectUris().add(reactValidRedirectURL);
+        client.getRedirectUris().add(angularValidRedirectURL);
+        client.getWebOrigins().add(reactDomain);
+        client.getWebOrigins().add(angularValidRedirectURL);
+        client.getRedirectUris().add(reactDomain);
+        client.getRedirectUris().add(angularValidRedirectURL);
+        realmResource.clients().get(client.getId()).update(client);
+        log.info("Redirect url added successfully to keycloak client for domain: " + domain + " with redirect url: " +reactValidRedirectURL + " and " + angularValidRedirectURL);
     }
 
     

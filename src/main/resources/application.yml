@@ -14,7 +14,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://localhost:9999/realms/OneShoot}
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://oneshoot.local:9999/realms/OneShoot}
   application:
     name: tenantService
   servlet:
@@ -34,7 +34,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: oneshootapplication@gmail.com
-    password: 
+    password: rlsyhauozwxkdvtc
     properties:
       mail:
         smtp:

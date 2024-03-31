@@ -8,6 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
@@ -27,6 +30,9 @@ public class TenantServiceApplication {
 	@Autowired
 	TenantRepository tenantRepository;
 
+	@Autowired
+	KafkaTemplate<String, String> kafkaTemplate;
+
 	public static void main(String[] args) {
 		SpringApplication.run(TenantServiceApplication.class, args);
 	}
@@ -36,13 +42,27 @@ public class TenantServiceApplication {
         return http
                 .authorizeHttpRequests(request ->
                     request
-                        .requestMatchers("/actuator/**").permitAll()
+                        // .requestMatchers("/actuator/**").permitAll()
+						.requestMatchers("/cl/**").permitAll()
+						.requestMatchers("/api/cl/**").permitAll()
+						// .requestMatchers("/api/cl/**").permitAll()
+						// .requestMatchers("/api/cl/tenants/**").permitAll()
+						.requestMatchers(HttpMethod.POST,"/cl/subscriptions/**").permitAll()
+						.requestMatchers(HttpMethod.POST,"/api/cl/subscriptions/**").permitAll()
                         .anyRequest().authenticated()
+						//.anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .build();
     }
 
+	// produces a message using kafka template
+	// @Bean
+	// CommandLineRunner runner2() {
+	// 	return args -> {
+	// 		kafkaTemplate.send("tenant", "myapplication");
+	// 	};
+	// }
 
 	//@Bean
 	@Transactional(rollbackFor = Exception.class)
@@ -66,4 +86,10 @@ public class TenantServiceApplication {
 			tenantRegistrationService.registerTenant(tenant, SubscriptionType.PROFESSIONAL,true);
 		};
 	}
+
+
+	// @KafkaListener(topics = "tenant", groupId = "group_id")
+	// public void consume(Tenant tenant) {
+	// 	log.info("Consumed tenant: {}", tenant);
+	// }
 }

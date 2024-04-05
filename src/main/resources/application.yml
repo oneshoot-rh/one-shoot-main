@@ -34,7 +34,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: oneshootapplication@gmail.com
-    password: rlsyhauozwxkdvtc
+    password: rlsyhauozwxkdvtc # expired no worries :)
     properties:
       mail:
         smtp:
